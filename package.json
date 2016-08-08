@@ -1,0 +1,35 @@
+{
+  "name": "node-sourcekit",
+  "version": "1.0.0",
+  "description": "SourceKit bindings for Node.js",
+  "engines": {
+    "node": "~6.3.0"
+  },
+  "main": "./lib/node-sourcekit",
+  "keywords": [
+    "SourceKit",
+    "swift",
+    "syntax",
+    "ast"
+  ],
+  "author": {
+    "name": "Ryan Lovelett",
+    "email": "ryan@lovelett.me",
+    "url": "https://github.com/RLovelett"
+  },
+  "license": "MIT",
+  "gypfile": true,
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --reporter spec",
+    "install": "node-gyp rebuild"
+  },
+  "dependencies": {
+    "bindings": "^1.2.1",
+    "nan": "^2.4.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-as-promised": "^5.3.0",
+    "mocha": "^3.0.1"
+  }
+}

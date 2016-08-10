@@ -72,8 +72,11 @@ namespace SourceKit {
         sourcekitd_uid_get_from_cstr("key.sourcetext");
     static sourcekitd_uid_t KeySourceFile =
         sourcekitd_uid_get_from_cstr("key.sourcefile");
+
     static sourcekitd_uid_t RequestCursorInfo =
         sourcekitd_uid_get_from_cstr("source.request.cursorinfo");
+    static sourcekitd_uid_t RequestDocumentInfo =
+        sourcekitd_uid_get_from_cstr("source.request.docinfo");
 
     NAN_METHOD(CursorInfo) {
         // This method never returns anything
@@ -160,6 +163,74 @@ namespace SourceKit {
         AsyncQueueWorker(work);
     }
 
+    NAN_METHOD(DocumentInformation) {
+        // This method never returns anything
+        info.GetReturnValue().SetUndefined();
+
+        sourcekitd_object_t Req =
+            sourcekitd_request_dictionary_create(nullptr, nullptr, 0);
+        sourcekitd_request_dictionary_set_uid(Req, KeyRequest,
+                                              RequestDocumentInfo);
+
+        // TODO: Unsafe cast (e.g., ToLocalChecked())
+        v8::Local<v8::Object> options =
+            To<v8::Object>(info[0]).ToLocalChecked();
+
+        // NOTE: This line could cause a runtime exception.
+        // This is the same as a Swift IUO, e.g., v8::String!. Granted it is
+        // unlikely to do so.
+        v8::Local<v8::String> sourcefileKey =
+            Nan::New<v8::String>("sourcefile").ToLocalChecked();
+        Nan::Maybe<Nan::Utf8String*> sourceFile =
+            map(Nan::Get(options, sourcefileKey), valueToCString);
+        if (sourceFile.IsNothing()) {
+            Nan::ThrowTypeError("Ensure the object has a property "
+                                "\"sourcefile\" property and that property can "
+                                "be coerced into a String.");
+            return;
+        } else {
+            sourcekitd_request_dictionary_set_string(Req, KeySourceFile,
+                                                     **sourceFile.FromJust());
+        }
+        // TODO: Pretty sure there is a memory leak here!
+
+        // NOTE: This line could cause a runtime exception.
+        // This is the same as a Swift IUO, e.g., v8::String!. Granted it is
+        // unlikely to do so.
+        v8::Local<v8::String> compilerargsKey =
+            Nan::New<v8::String>("compilerargs").ToLocalChecked();
+        Nan::MaybeLocal<v8::Array> compilerargs =
+            flatMap(Nan::Get(options, compilerargsKey), valueToArray);
+        if (compilerargs.IsEmpty()) {
+            Nan::ThrowTypeError("Ensure the object has a property "
+                                "\"compilerargst\" property and that property "
+                                "can be coerced into a Array of String "
+                                "values.");
+            return;
+        } else {
+            v8::Local<v8::Array> args = compilerargs.ToLocalChecked();
+            sourcekitd_object_t Args =
+                sourcekitd_request_array_create(nullptr, 0);
+            for (uint32_t i = 0; i < args->Length(); i++) {
+                v8::Local<v8::Value> arg = args->Get(i);
+                sourcekitd_request_array_set_string(
+                    Args, SOURCEKITD_ARRAY_APPEND, *Nan::Utf8String(arg));
+            }
+            sourcekitd_request_dictionary_set_value(Req, KeyCompilerArgs, Args);
+            sourcekitd_request_release(Args);
+        }
+
+#ifdef DEBUG
+        sourcekitd_request_description_dump(Req);
+#endif
+
+        // Get a reference to the 2nd argument, which should be a function
+        Callback* callback = new Callback(info[1].As<Function>());
+
+        auto work = new Worker(callback, Req);
+        AsyncQueueWorker(work);
+    }
+
     NAN_MODULE_INIT(Init) {
         // Initializes structures needed across the SourceKit API
         sourcekitd_initialize();
@@ -178,6 +249,9 @@ namespace SourceKit {
         Nan::Set(
             target, New<String>("cursorinfo").ToLocalChecked(),
             GetFunction(New<FunctionTemplate>(CursorInfo)).ToLocalChecked());
+        Nan::Set(target, New<String>("documentinfo").ToLocalChecked(),
+                 GetFunction(New<FunctionTemplate>(DocumentInformation))
+                     .ToLocalChecked());
     }
 
     NODE_MODULE(addon, Init)

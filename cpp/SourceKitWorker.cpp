@@ -2,8 +2,8 @@
 
 namespace SourceKit {
 
-    Worker::Worker(Nan::Callback *callback, sourcekitd_object_t request)
-        : AsyncWorker(callback), Request(request), buffer(nullptr) {};
+    Worker::Worker(Nan::Callback* callback, sourcekitd_object_t request)
+        : AsyncWorker(callback), Request(request), buffer(nullptr){};
 
     Worker::~Worker() {
         sourcekitd_request_release(Request);
@@ -39,5 +39,4 @@ namespace SourceKit {
             callback->Call(1, &thing);
         }
     };
-
 }

@@ -1,0 +1,9 @@
+---
+BasedOnStyle:  LLVM
+IndentWidth: 4
+---
+Language: Cpp
+DerivePointerAlignment: false
+PointerAlignment: Left
+MaxEmptyLinesToKeep: 1
+NamespaceIndentation: All

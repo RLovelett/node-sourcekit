@@ -21,6 +21,7 @@
   "gypfile": true,
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter spec",
+    "watch": "./node_modules/.bin/mocha -w --reporter spec",
     "install": "node-gyp rebuild"
   },
   "dependencies": {

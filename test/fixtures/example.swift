@@ -23,3 +23,5 @@ struct Foo {
     }
 
 }
+
+ley Y = Food(qud: 3)

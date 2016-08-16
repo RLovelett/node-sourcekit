@@ -15,6 +15,16 @@
                 "-std=c++11"
             ],
             "conditions": [
+                [ "OS==\"linux\"", {
+                    "libraries": [
+                        "-lsourcekitdInProc",
+                        "-L/usr/lib/swift/linux",
+                        "-lswiftCore",
+                        "-lswiftSwiftOnoneSupport",
+                        "-Wl,-rpath",
+                        "-Wl,/usr/lib/swift/linux"
+                    ]
+                }],
                 [ "OS==\"mac\"", {
                     "xcode_settings": {
                         "MACOSX_DEPLOYMENT_TARGET": "10.7",

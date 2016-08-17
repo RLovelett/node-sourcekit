@@ -15,6 +15,20 @@
                 "-std=c++11"
             ],
             "conditions": [
+                [ "OS==\"linux\"", {
+                    "libraries": [
+                        "-lsourcekitdInProc",
+                        "-L/usr/lib/swift/linux",
+                        # TODO: Figure out why --no-as-needed is necessary
+                        # Not necessary with Clang, e.g., CC=clang CXX=clang++ LINKXX=clang++ LINK=clang node-gyp rebuild --verbose
+                        # Not GCC (6.1.1 20160802) on Arch Linux
+                        "-Wl,--no-as-needed",
+                        "-lswiftCore",
+                        "-lswiftSwiftOnoneSupport",
+                        "-Wl,-rpath",
+                        "-Wl,/usr/lib/swift/linux"
+                    ]
+                }],
                 [ "OS==\"mac\"", {
                     "xcode_settings": {
                         "MACOSX_DEPLOYMENT_TARGET": "10.7",

@@ -1,8 +1,9 @@
 # node-sourcekit
 
-![Downloads](https://img.shields.io/github/downloads/RLovelett/node-sourcekit/total.svg?style=flat-square)
-![NPM](https://img.shields.io/github/npm/dm/node-sourcekit.svg?style=flat-square)
-![NPM](https://img.shields.io/github/npm/dt/node-sourcekit.svg?style=flat-square)
+[![Build Status](https://travis-ci.org/RLovelett/node-sourcekit.svg)](https://travis-ci.org/RLovelett/node-sourcekit)
+[![npm](https://img.shields.io/npm/v/node-sourcekit.svg?maxAge=2592000?style=flat-square)](https://www.npmjs.com/package/node-sourcekit)
+[![npm](https://img.shields.io/npm/dt/node-sourcekit.svg?maxAge=2592000?style=flat-square)](https://www.npmjs.com/package/node-sourcekit)
+[![npm](https://img.shields.io/npm/dm/node-sourcekit.svg?maxAge=2592000?style=flat-square)](https://www.npmjs.com/package/node-sourcekit)
 ![License](https://img.shields.io/github/license/RLovelett/node-sourcekit.svg?style=flat-square)
 
 node-sourcekit is a native C++ wrapper for the [SourceKit framework](https://github.com/apple/swift/tree/48bfec49fb4e97584caaa409a99fac48d47de6b0/tools/SourceKit)
@@ -12,6 +13,15 @@ language. Features like indexing, syntax-coloring, code-completion. SourceKit cu
 supports the Swift language.
 
 This project was created to support [vscode-swift](https://github.com/RLovelett/vscode-swift) and [nuclide-swift](https://github.com/facebook/nuclide/tree/master/pkg/nuclide-swift).
+
+## Support
+
+Ideally this project should support all of the platforms that the Swift project supports.
+
+| Operating System (or Distro) | Node.js Version |
+| -------------:|:------------|
+| macOS (>= 10.11.6) | >= 4.4.6  |
+| Ubuntu (>= 14.04) | >= 4.4.6  |
 
 ## TODO
 

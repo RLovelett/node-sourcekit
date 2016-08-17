@@ -6,6 +6,7 @@
     "node": "~6.3.0"
   },
   "main": "./lib/node-sourcekit",
+  "typings": "./lib/node-sourcekit.d.ts",
   "keywords": [
     "SourceKit",
     "swift",
